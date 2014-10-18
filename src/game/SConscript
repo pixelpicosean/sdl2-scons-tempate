@@ -1,0 +1,24 @@
+Import('env')
+
+print '[I] building game (' + env['mode'] + ')'
+
+# create a local environment cloning the imported one
+localEnv = env.Clone();
+
+# sources
+sources = Split(""" main.cc """)
+
+# flags
+localEnv.Append(CCFLAGS = ['-D_REENTRANT'])
+localEnv.Append(LINKFLAGS=['-Wl'])
+# localEnv.Append(LINKFLAGS=['-Wl,--no-undefined'])
+
+# libraries
+localEnv.Append(FRAMEWORKS = ['SDL2'])
+# localEnv.Append(LIBS = ['pthread', 'm', 'dl', 'ts', 'pthread', 'rt'])
+
+# paths
+localEnv.Append(FRAMEWORKPATH=['/Library/Frameworks'])
+
+# build an executable
+localEnv.Program('#/bin/%s/game/app' % localEnv['mode'], sources)
