@@ -21,6 +21,21 @@ bool init(const char *title, int width, int height)
     return true;
 }
 
+void handleEvents() {
+    SDL_Event event;
+    if (SDL_PollEvent(&event)) {
+        switch (event.type) {
+            case SDL_QUIT:
+                g_bRunning = false;
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+void update() {}
+
 void render()
 {
     // Set to black
@@ -33,6 +48,14 @@ void render()
     SDL_RenderPresent(g_pRenderer);
 }
 
+void clean()
+{
+    SDL_DestroyWindow(g_pWindow);
+    SDL_DestroyRenderer(g_pRenderer);
+
+    SDL_Quit();
+}
+
 int main(int argc, char *argv[])
 {
     if (init("Awesome Game", 640, 480)) {
@@ -43,10 +66,12 @@ int main(int argc, char *argv[])
     }
 
     while (g_bRunning) {
+        handleEvents();
+        update();
         render();
     }
 
-    SDL_Quit();
+    clean();
 
     return 0;
 }
